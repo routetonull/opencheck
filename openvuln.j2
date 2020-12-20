@@ -1,0 +1,14 @@
+# Security posture via Cisco PSIRT OpenVuln API
+
+## Platform: {{ env('platform') }}
+## Version:  {{ env('version') }}
+
+{% if advisories is defined %}
+| Advisory-ID | Impact | CVSS | CVE | Fixed with | First Published | 
+| ----------- | ------ | ---- | --- | ---------- | ----------------|  
+{% for advisory in advisories -%}
+{{advisory.advisoryId}} | {{advisory.advisoryTitle}} | {{advisory.cvssBaseScore}} | {{advisory.cves[0]}} | {{advisory.platforms[0].firstFixes[0].name}} | {{advisory.firstPublished}}
+{% endfor %}
+{% else %}
+No active OpenVuln advisories found!  
+{% endif %}
