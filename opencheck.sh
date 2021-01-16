@@ -12,9 +12,17 @@ fi
 which jq > /dev/null
 if test $? == 1
   then 
-    echo MISSING J2 - install with "apt install jq" 
+    echo MISSING J2 - install with "sudo apt install jq" 
     exit 1
 fi
+
+which curl > /dev/null
+if test $? == 1
+  then 
+    echo MISSING J2 - install with "sudo apt install curl" 
+    exit 1
+fi
+
 
 if [ "$CISCO_API_KEY" ] && [ "$CISCO_CLIENT_SECRET" ]
   then
