@@ -41,6 +41,12 @@ if [ "$CISCO_API_KEY" ] && [ "$CISCO_CLIENT_SECRET" ]
         -d "grant_type=client_credentials" \
         https://cloudsso.cisco.com/as/token.oauth2 | jq -r ".access_token")
     
+        if test $token == null
+          then
+            echo -e "\nERROR: invalid credentials\n"
+            exit 1
+        fi
+
         platform="$1"
         version="$2"
     
