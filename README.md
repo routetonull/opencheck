@@ -15,6 +15,8 @@ Env vars:
     export CISCO_API_KEY=myciscoapikey
     export CISCO_CLIENT_SECRET=mycisccolientsecret
 
+Or edit credentials in file *credentials.env"
+
 Usage:
 
     ./opencheck.sh <platform> <version>

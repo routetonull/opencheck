@@ -5,24 +5,29 @@
 which j2 > /dev/null
 if test $? == 1
   then 
-    echo MISSING J2 - install with "pip3 install j2cli" 
+    echo MISSING J2 - install with pip3 install j2cli
     exit 1
 fi
 
 which jq > /dev/null
 if test $? == 1
   then 
-    echo MISSING J2 - install with "sudo apt install jq" 
+    echo MISSING J2 - install with sudo apt install jq
     exit 1
 fi
 
 which curl > /dev/null
 if test $? == 1
   then 
-    echo MISSING J2 - install with "sudo apt install curl" 
+    echo MISSING J2 - install with sudo apt install curl 
     exit 1
 fi
 
+# if credentials are stored in local file set them
+if test -f credentials.env
+  then
+    source credentials.env
+fi
 
 if [ "$CISCO_API_KEY" ] && [ "$CISCO_CLIENT_SECRET" ]
   then
@@ -52,14 +57,25 @@ if [ "$CISCO_API_KEY" ] && [ "$CISCO_CLIENT_SECRET" ]
         errorcode=$(echo $output | jq ".errorCode")
         if test ! $errorcode == null
           then
-            echo "ERROR: $errorcode"
+            echo -e "\nERROR: $errorcode\n"
+          elif test -z "$output"
+            then
+              echo -e "\nERROR: no output - check platform and version\n"
           else
             echo $output| jq | j2 -f json openvuln.j2 - > vuln-$platform-$version.md
-            echo "CREATED FILE vuln-$platform-$version.md"
+            echo -e "\nCREATED FILE vuln-$platform-$version.md\n"
         fi 
       else 
-        echo "ERROR: Missing parameters platform and version"
+        echo -e "\nERROR: Missing parameters platform and version"
+        echo -e "\nUsage: $0 {ios|iosxe|nxos|aci} {version}\n"
     fi
   else
-    echo "ERROR: Missing credentials CISCO_API_KEY and CISCO_CLIENT_SECRET"
+    echo -e "\nERROR: Missing credentials CISCO_API_KEY and CISCO_CLIENT_SECRET\n"
+fi
+
+# unset credentials if imported from local file
+if test -f credentials.env
+  then
+    unset CISCO_API_KEY
+    unset CISCO_CLIENT_SECRET
 fi
