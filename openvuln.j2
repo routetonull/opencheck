@@ -7,7 +7,7 @@
 | Advisory-ID | Impact | CVSS | CVE | Fixed with | First Published | 
 | ----------- | ------ | ---- | --- | ---------- | ----------------|  
 {% for advisory in advisories -%}
-{{advisory.advisoryId}} | {{advisory.advisoryTitle}} | {{advisory.cvssBaseScore}} | {{advisory.cves[0]}} | {{advisory.platforms[0].firstFixes[0].name}} | {{advisory.firstPublished}}
+{{advisory.advisoryId}} | {{advisory.advisoryTitle}} | {{advisory.cvssBaseScore}} | {{advisory.cves[0]}} | {% if advisory.platforms is defined %} {{ advisory.platforms[0].firstFixes[0].name }} {% endif %} | {{advisory.firstPublished}}
 {% endfor %}
 {% else %}
 No active OpenVuln advisories found!  
