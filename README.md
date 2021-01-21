@@ -1,5 +1,7 @@
 # OPENCHECK
 
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/routetonull/opencheck)
+
 Get [Cisco PSIRT OpenVuln](https://developer.cisco.com/psirt/) for a provided platform/version and renders a markdown report.
 
 *Inspired by [https://github.com/NWMichl/openvuln](https://github.com/NWMichl/openvuln)*
