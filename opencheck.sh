@@ -5,21 +5,21 @@
 which j2 > /dev/null
 if test $? == 1
   then 
-    echo MISSING J2 - install with pip3 install j2cli
+    echo MISSING J2 - install with sudo apt  install j2cli
     exit 1
 fi
 
 which jq > /dev/null
 if test $? == 1
   then 
-    echo MISSING J2 - install with sudo apt install jq
+    echo MISSING JQ - install with sudo apt install jq
     exit 1
 fi
 
 which curl > /dev/null
 if test $? == 1
   then 
-    echo MISSING J2 - install with sudo apt install curl 
+    echo MISSING CURL - install with sudo apt install curl 
     exit 1
 fi
 
@@ -27,6 +27,9 @@ fi
 if test -f credentials.env
   then
     source credentials.env
+  else
+    echo MISSING credentials.env
+    exit 1
 fi
 
 if [ "$CISCO_API_KEY" ] && [ "$CISCO_CLIENT_SECRET" ]
@@ -39,7 +42,7 @@ if [ "$CISCO_API_KEY" ] && [ "$CISCO_CLIENT_SECRET" ]
         -d "client_id=$CISCO_API_KEY" \
         -d "client_secret=$CISCO_CLIENT_SECRET" \
         -d "grant_type=client_credentials" \
-        https://cloudsso.cisco.com/as/token.oauth2 | jq -r ".access_token")
+        https://id.cisco.com/oauth2/default/v1/token | jq -r ".access_token")
     
         if test $token == null
           then
@@ -58,7 +61,7 @@ if [ "$CISCO_API_KEY" ] && [ "$CISCO_CLIENT_SECRET" ]
         -X GET \
         -H "Accept: application/json" \
         -H "Authorization: Bearer $token" \
-        https://api.cisco.com/security/advisories/$platform?version=$version) 
+        https://apix.cisco.com/security/advisories/v2/OSType/$platform?version=$version) 
         
         errorcode=$(echo $output | jq ".errorCode")
         if test ! $errorcode == null
@@ -73,7 +76,7 @@ if [ "$CISCO_API_KEY" ] && [ "$CISCO_CLIENT_SECRET" ]
         fi 
       else 
         echo -e "\nERROR: Missing parameters platform and version"
-        echo -e "\nUsage: $0 {ios|iosxe|nxos|aci} {version}\n"
+        echo -e "\nUsage: $0 {ios|iosxe|nxos|aci|asa} {version}\n"
     fi
   else
     echo -e "\nERROR: Missing credentials CISCO_API_KEY and CISCO_CLIENT_SECRET\n"
